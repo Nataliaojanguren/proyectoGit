@@ -1,0 +1,24 @@
+name: Prueba de tokens
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  comprobar-tokens:
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+      - name: Comparar tokens
+        shell: powershell
+        env:
+          DEV_TOKEN: ${{ secrets.DEV_TOKEN }}
+        run: |
+          $localToken = [Environment]::GetEnvironmentVariable("LOCAL_DEV_TOKEN", "User")
+
+          if ($env:DEV_TOKEN -eq $localToken -and $localToken) {
+            Write-Host "CORRECTO: Los tokens coinciden"
+          } else {
+            Write-Host "ERROR: Los tokens no coinciden"
+            exit 1
+          }
